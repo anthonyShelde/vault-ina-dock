@@ -67,6 +67,7 @@ services:
      - 172.18.0.3
     volumes:
      - ./vault/conf:/conf:ro
+     - ./vault/certs:/certs:ro
     command: server -config=/conf
     depends_on:
       - "consula"
