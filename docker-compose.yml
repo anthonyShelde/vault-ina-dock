@@ -68,8 +68,30 @@ services:
     volumes:
      - ./vault/conf:/conf:ro
      - ./vault/certs:/certs:ro
+    environment:
+     - VAULT_ADVERTISE_ADDR=https://172.18.0.5:8200
     command: server -config=/conf
     depends_on:
       - "consula"
       - "consulb"
       - "consulc"
+  vault_standby:
+    image: vault
+    cap_add:
+     - IPC_LOCK
+    ports:
+     - "8200"
+    dns:
+     - 172.18.0.2
+     - 172.18.0.3
+    volumes:
+     - ./vault/conf:/conf:ro
+     - ./vault/certs:/certs:ro
+    environment:
+     - VAULT_ADVERTISE_ADDR=https://172.18.0.6:8200
+    command: server -config=/conf
+    depends_on:
+      - "consula"
+      - "consulb"
+      - "consulc"
+      - "vault"
